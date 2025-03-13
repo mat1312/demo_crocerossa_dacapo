@@ -74,7 +74,6 @@ class ContactInfoResponse(BaseModel):
 # Modello Pydantic per la richiesta e risposta del webhook ElevenLabs
 class ElevenLabsWebhookRequest(BaseModel):
     text: str
-    conversation_id: str
 
 class ElevenLabsWebhookResponse(BaseModel):
     response: str
@@ -365,9 +364,6 @@ async def extract_contact_info():
 async def elevenlabs_webhook(request: ElevenLabsWebhookRequest):
     """Endpoint per webhook ElevenLabs che restituisce i top 5 chunk dalla RAG."""
     try:
-        # Mappa conversation_id a session_id per coerenza interna
-        session_id = request.conversation_id
-        
         # Ottiene il vectorstore
         vector_store = get_vectorstore()
         
@@ -382,18 +378,6 @@ async def elevenlabs_webhook(request: ElevenLabsWebhookRequest):
         
         # Combina tutti i chunk in un'unica risposta
         combined_response = "\n\n".join([doc.page_content for doc in docs])
-        
-        # Salva la query nella storia della conversazione se necessario
-        if session_id in conversation_history:
-            conversation_history[session_id].append({
-                "role": "user",
-                "content": request.text
-            })
-        else:
-            conversation_history[session_id] = [{
-                "role": "user",
-                "content": request.text
-            }]
         
         return ElevenLabsWebhookResponse(response=combined_response)
     
