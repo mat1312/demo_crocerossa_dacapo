@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assistente Croce Rossa Italiana</title>
+  <!-- Bootstrap CSS (lasciato per compatibilità con il widget) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Animation Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cri: {
+              red: '#e3000f',
+              darkred: '#b80000',
+              lightred: '#ff3b4a',
+              gray: '#f2f2f2',
+              darkgray: '#333333',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #fafafa;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e3000f' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* Effetto di parallax per l'header */
+    .parallax-header {
+      position: relative;
+      overflow: hidden;
+      height: 220px;
+      background: linear-gradient(135deg, #e3000f 0%, #b80000 100%);
+    }
+    
+    .parallax-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%23ffffff' fill-opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.8;
+      z-index: 0;
+    }
+    
+    .parallax-header-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header-wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      transform: rotate(180deg);
+    }
+
+    .header-wave svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 46px;
+    }
+
+    .header-wave .shape-fill {
+      fill: #FFFFFF;
+    }
+
+    .cri-red {
+      background-color: #e3000f;
+    }
+    
+    .cri-text-red {
+      color: #e3000f;
+    }
+
+    /* Animazione per il logo della Croce Rossa */
+    @keyframes pulse-subtle {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse-animation {
+      animation: pulse-subtle 3s infinite ease-in-out;
+    }
+    
+    /* Card con effetti avanzati */
+    .card-3d {
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 30px rgba(227, 0, 15, 0.1);
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    
+    .card-3d:hover {
+      transform: translateY(-5px) translateZ(0);
+      box-shadow: 0 15px 35px rgba(227, 0, 15, 0.15);
+    }
+    
+    .card-header {
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      background: linear-gradient(to right, #f9f9f9, #ffffff);
+      padding: 1.25rem 1.5rem;
+    }
+    
+    /* Bottoni con effetti moderni */
+    .btn-cri {
+      background: linear-gradient(135deg, #e3000f 0%, #b80000 100%);
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(227, 0, 15, 0.3);
+      border: none;
+    }
+    
+    .btn-cri:hover {
+      background: linear-gradient(135deg, #ff3b4a 0%, #e3000f 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 7px 20px rgba(227, 0, 15, 0.4);
+    }
+    
+    .btn-cri::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .btn-cri:hover::after {
+      animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+    
+    /* Input con effetti moderni */
+    .input-cri {
+      transition: all 0.3s ease;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .input-cri:focus {
+      border-color: #e3000f;
+      box-shadow: 0 0 0 4px rgba(227, 0, 15, 0.15);
+      outline: none;
+    }
+    
+    /* Container del widget: centrato orizzontalmente, ancorato in alto */
+    .widget-container {
+      max-width: 600px;
+      min-height: 250px;
+      margin: 0 auto;                /* Centra il container nella pagina */
+      position: relative !important; /* Mantiene la compatibilità col widget */
+      display: flex;                 
+      align-items: flex-start;       /* Posiziona il widget in alto */
+      justify-content: center;       /* Centra orizzontalmente */
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    @media only screen and (max-width: 768px) {
+      .widget-container {
+        width: 90%;
+        min-height: auto;  /* su mobile l'altezza può ridursi */
+      }
+    }
+
+    /* Rimuoviamo i posizionamenti assoluti dal widget */
+    elevenlabs-convai {
+      position: static !important;
+      top: 0 !important;
+      left: 0 !important;
+      transform: none !important;
+      margin: 0 auto !important;
+    }
+    
+    /* Badge CRI personalizzato */
+    .badge-cri {
+      background-color: rgba(227, 0, 15, 0.1);
+      color: #e3000f;
+      border-radius: 50px;
+      padding: 0.35rem 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(227, 0, 15, 0.1);
+    }
+    
+    .badge-cri i {
+      margin-right: 0.35rem;
+    }
+
+    /* Chat container con stile migliorato */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+      overflow-y: auto;
+      padding: 1.5rem;
+      background-color: #fafafa;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .chat-message {
+      max-width: 80%;
+      margin-bottom: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    
+    .chat-message:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #e3000f 0%, #b80000 100%);
+      color: white;
+      border-bottom-right-radius: 0.25rem;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+      background-color: white;
+      color: #333;
+      border-bottom-left-radius: 0.25rem;
+      border-left: 3px solid #e3000f;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+      opacity: 0.7;
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      background-color: white;
+      border-radius: 1.5rem;
+      border-bottom-left-radius: 0.25rem;
+      width: max-content;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      margin: 0 2px;
+      background-color: #e3000f;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: typing 1.5s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+      }
+      30% {
+        transform: translateY(-5px);
+      }
+    }
+    
+    /* Scrollbar personalizzata */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #e3000f;
+      border-radius: 10px;
+      opacity: 0.7;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b80000;
+    }
+    
+    /* Floating btn per la chat */
+    .chat-float-btn {
+      position: absolute;
+      bottom: -20px;
+      right: 20px;
+      background: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .chat-float-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    
+    /* Animazione di apparizione per le sezioni */
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .fade-in-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Header parallax con effetto onda -->
+  <header class="parallax-header mb-12">
+    <div class="parallax-header-content h-full flex items-center justify-center">
+      <div class="text-center px-4">
+        <div class="pulse-animation inline-block bg-white p-4 rounded-full shadow-lg mb-4">
+          <svg class="w-20 h-20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="50" fill="white"/>
+            <rect x="43" y="20" width="14" height="60" fill="#E3000F"/>
+            <rect x="20" y="43" width="60" height="14" fill="#E3000F"/>
+          </svg>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">Assistente Croce Rossa Italiana</h1>
+        
+      </div>
+    </div>
+    <div class="header-wave">
+      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </header>
+  
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Sezione Q&A -->
+    <section id="qa-section" class="card-3d mb-12 fade-in-section" data-aos="fade-up" data-aos-duration="1000">
+      <div class="card-header">
+        <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+          <i class="fas fa-comments cri-text-red mr-3"></i>
+          Conversazione con Assistente CRI
+          <span class="badge-cri ml-3">
+            <i class="fas fa-shield-alt"></i> Assistenza Virtuale
+          </span>
+        </h2>
+      </div>
+      <div class="p-6 relative">
+        <!-- Chat Container -->
+        <div id="chat-container" class="chat-container mb-6"></div>
+        
+        <!-- Form per inviare messaggi -->
+        <form id="qa-form" class="flex items-center">
+          <input 
+            type="text" 
+            class="w-full input-cri mr-3" 
+            id="userInput" 
+            placeholder="Es. Come posso diventare volontario?">
+          <button 
+            type="submit" 
+            class="btn-cri font-medium py-3 px-6 rounded-full flex-shrink-0 flex items-center">
+            <i class="fas fa-paper-plane mr-2"></i>
+            Invia
+          </button>
+        </form>
+        
+        <!-- Pulsante per resettare la conversazione -->
+        <div class="flex justify-end mt-4">
+          <button 
+            id="btnResetChat" 
+            class="text-gray-600 hover:text-red-600 font-medium py-2 px-4 rounded-lg text-sm flex items-center hover:bg-gray-100 transition-all duration-300">
+            <i class="fas fa-sync-alt mr-2"></i>
+            Nuova conversazione
+          </button>
+        </div>
+        
+        <!-- Floating button per la chat -->
+        <div class="chat-float-btn">
+          <i class="fas fa-chevron-down cri-text-red"></i>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Sezione Agent Conversazionale ElevenLabs -->
+    <section id="elevenlabs-section" class="card-3d mb-12 fade-in-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+      <div class="card-header flex justify-between items-center">
+        <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+          <i class="fas fa-robot cri-text-red mr-3"></i>
+          Assistente Vocale
+        </h2>
+        <span class="badge-cri">
+          <i class="fas fa-microphone"></i> Interazione Vocale
+        </span>
+      </div>
+      <div class="p-0 bg-gray-50 relative">
+        <!-- Wrapper per centrare il widget sotto il titolo -->
+        <div class="flex justify-center py-8">
+          <div class="widget-container" id="widget-container">
+            <!-- Widget ElevenLabs: sostituisci agent-id se necessario -->
+            <elevenlabs-convai agent-id="j9lr1Zv4W5s6khw0lxK5"></elevenlabs-convai>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Sezione Transcript e Estrazione Contatti -->
+    <section id="transcript-section" class="mb-12 fade-in-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Colonna Transcript -->
+        <div class="card-3d">
+          <div class="card-header">
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+              <i class="fas fa-history cri-text-red mr-3"></i>
+              Cronologia Conversazione
+            </h3>
+          </div>
+          <div class="p-6">
+            <div class="bg-gray-50 p-5 rounded-xl mb-4 border border-gray-100">
+              <p class="text-gray-700 mb-3">Scarica la cronologia completa della tua conversazione per futuri riferimenti.</p>
+              <button 
+                id="btnRetrieve" 
+                class="btn-cri font-medium py-2 px-5 rounded-lg flex items-center">
+                <i class="fas fa-download mr-2"></i>
+                Scarica transcript
+              </button>
+            </div>
+            <div id="transcript-display" class="bg-white border border-gray-100 rounded-xl p-4 h-64 overflow-y-auto shadow-sm"></div>
+          </div>
+        </div>
+          
+        <!-- Colonna Estrazione Contatti -->
+        <div class="card-3d">
+          <div class="card-header">
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+              <i class="fas fa-user-check cri-text-red mr-3"></i>
+              Dati e Informazioni
+            </h3>
+          </div>
+          <div class="p-6">
+            <div class="bg-gray-50 p-5 rounded-xl mb-4 border border-gray-100">
+              <p class="text-gray-700 mb-3">Estrai le informazioni importanti e dati di contatto dalla conversazione.</p>
+              <button 
+                id="btnExtract" 
+                class="btn-cri font-medium py-2 px-5 rounded-lg flex items-center">
+                <i class="fas fa-clipboard-list mr-2"></i>
+                Estrai informazioni
+              </button>
+            </div>
+            <div id="contact-display" class="bg-white border border-gray-100 rounded-xl p-4 h-64 overflow-y-auto shadow-sm"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Info Cards -->
+    <section class="mb-12 fade-in-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card-3d p-6 text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-heart text-2xl cri-text-red"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Assistenza Immediata</h3>
+          <p class="text-gray-600">Ottieni risposte immediate alle tue domande sulla Croce Rossa e i suoi servizi.</p>
+        </div>
+        
+        <div class="card-3d p-6 text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-hands-helping text-2xl cri-text-red"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Supporto Continuo</h3>
+          <p class="text-gray-600">Assistenza disponibile 24/7 per rispondere a tutte le tue necessità in tempo reale.</p>
+        </div>
+        
+        <div class="card-3d p-6 text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-user-shield text-2xl cri-text-red"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Privacy Garantita</h3>
+          <p class="text-gray-600">Le tue informazioni sono sempre protette e trattate con la massima riservatezza.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="text-center text-gray-600 py-8 mb-6">
+      <div class="flex items-center justify-center mb-4">
+        <svg class="w-8 h-8 mr-3" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="50" fill="#E3000F"/>
+          <rect x="43" y="20" width="14" height="60" fill="white"/>
+          <rect x="20" y="43" width="60" height="14" fill="white"/>
+        </svg>
+        <span class="text-lg font-medium">Croce Rossa Italiana</span>
+      </div>
+      <p class="mb-4">© 2025 Croce Rossa Italiana - Tutti i diritti riservati</p>
+      <div class="flex justify-center space-x-4">
+        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors duration-300">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors duration-300">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors duration-300">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="text-gray-500 hover:text-red-600 transition-colors duration-300">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- AOS Animation Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  
+  <!-- Script per gestire le animazioni -->
+  <script>
+    // Inizializza AOS
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        once: true,
+        offset: 50
+      });
+      
+      // Animazione per le sezioni
+      const fadeElems = document.querySelectorAll('.fade-in-section');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      });
+      
+      fadeElems.forEach(elem => {
+        observer.observe(elem);
+      });
+      
+      // Gestione scroll della chat
+      const scrollToBottomBtn = document.querySelector('.chat-float-btn');
+      const chatContainer = document.getElementById('chat-container');
+      
+      if (scrollToBottomBtn && chatContainer) {
+        scrollToBottomBtn.addEventListener('click', function() {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+        
+        chatContainer.addEventListener('scroll', function() {
+          if (chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight) {
+            scrollToBottomBtn.style.opacity = '0';
+          } else {
+            scrollToBottomBtn.style.opacity = '1';
+          }
+        });
+      }
+    });
+  </script>
+  
+  <!-- Fallback for early DOM content to ensure visibility -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add a simple text content to show the page is loading
+      const mainContainer = document.querySelector('.max-w-6xl');
+      if (mainContainer && mainContainer.innerHTML.trim() === '') {
+        mainContainer.innerHTML = '<div class="text-center p-8"><h2>Caricamento dell\'assistente in corso...</h2></div>';
+      }
+    });
+  </script>
+  
+  <!-- Script del widget ElevenLabs - Load this after page content is visible -->
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+  
+  <!-- Script per gestire le chiamate al backend -->
+  <script>
+    // Variabili globali
+    let sessionId = null;
+    let chatContainer = null;
+    
+    // Inizializza la chat
+    function initChat() {
+      // Assicurati che chatContainer sia definito
+      chatContainer = document.getElementById('chat-container');
+      if (!chatContainer) {
+        console.error("Elemento chat-container non trovato");
+        return;
+      }
+      
+      // Genera un nuovo ID di sessione
+      sessionId = 'session-' + Math.random().toString(36).substring(2, 15);
+      
+      // Pulisci la chat
+      chatContainer.innerHTML = '';
+      
+      // Aggiungi un messaggio di benvenuto
+      addBotMessage('Benvenuto! Sono l\'assistente della Croce Rossa Italiana. Come posso aiutarti oggi?');
+    }
+    
+    // Funzione per aggiungere un messaggio dell'utente
+    function addUserMessage(text) {
+      // Verifica che chatContainer esista
+      if (!chatContainer) {
+        console.error("chatContainer non definito in addUserMessage");
+        return;
+      }
+      
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message user-message';
+      messageDiv.innerHTML = `
+        ${text}
+        <div class="message-time text-right">${time}</div>
+      `;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Funzione per aggiungere un messaggio del bot
+    function addBotMessage(text, sources = []) {
+      // Verifica che chatContainer esista
+      if (!chatContainer) {
+        console.error("chatContainer non definito in addBotMessage");
+        return;
+      }
+      
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Formatta le fonti se presenti
+      let sourcesHTML = '';
+      if (sources && sources.length > 0) {
+        sourcesHTML = '<div class="mt-2 text-xs text-gray-600"><hr class="my-1"><strong>Fonti:</strong><ul class="list-disc ml-4">';
+        for (const source of sources) {
+          sourcesHTML += `<li>${source.file_name || 'Documento sconosciuto'}</li>`;
+        }
+        sourcesHTML += '</ul></div>';
+      }
+      
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message bot-message';
+      messageDiv.innerHTML = `
+        ${text}
+        ${sourcesHTML}
+        <div class="message-time">${time}</div>
+      `;
+      
+      // Rimuovi l'indicatore di digitazione prima di aggiungere il messaggio
+      const typingIndicator = document.querySelector('.typing-indicator');
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+      
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Funzione per mostrare l'indicatore di digitazione
+    function showTypingIndicator() {
+      // Verifica che chatContainer esista
+      if (!chatContainer) {
+        console.error("chatContainer non definito in showTypingIndicator");
+        return;
+      }
+      
+      const indicatorDiv = document.createElement('div');
+      indicatorDiv.className = 'typing-indicator';
+      indicatorDiv.innerHTML = `
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      `;
+      chatContainer.appendChild(indicatorDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Funzione per inviare una domanda al backend
+    async function sendQuestion(question) {
+      try {
+        // Verifica che ci sia una sessione
+        if (!sessionId) {
+          console.error("sessionId non definito in sendQuestion");
+          return;
+        }
+        
+        // Mostra l'indicatore di digitazione
+        showTypingIndicator();
+        
+        // Chiamata API al backend
+        const response = await fetch('/langchain-query', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            query: question,
+            session_id: sessionId
+          })
+        });
+        
+        const data = await response.json();
+        
+        // Aggiungi la risposta al container della chat
+        if (data && data.answer) {
+          addBotMessage(data.answer, data.sources || []);
+        } else if (data && data.error) {
+          addBotMessage('Mi dispiace, si è verificato un errore: ' + data.error);
+        } else {
+          addBotMessage('Mi dispiace, si è verificato un errore durante l\'elaborazione della tua domanda.');
+        }
+      } catch (error) {
+        console.error('Errore nella chiamata API:', error);
+        
+        // Rimuovi l'indicatore di digitazione
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+        
+        addBotMessage('Mi dispiace, si è verificato un errore di comunicazione con il server.');
+      }
+    }
+    
+    // Assicurati che il DOM sia completamente caricato prima di inizializzare gli event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log("DOM caricato, inizializzazione eventi");
+      
+      // Riferimento al form Q&A
+      const qaForm = document.getElementById('qa-form');
+      if (qaForm) {
+        qaForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const userInput = document.getElementById('userInput').value.trim();
+          if (!userInput) return;
+          
+          // Aggiungi il messaggio dell'utente alla chat
+          addUserMessage(userInput);
+          
+          // Invia la domanda al backend
+          sendQuestion(userInput);
+          
+          // Pulisci l'input
+          document.getElementById('userInput').value = '';
+        });
+        console.log("Event listener per form Q&A inizializzato");
+      } else {
+        console.error("Elemento qa-form non trovato");
+      }
+    
+      // Gestione del pulsante per resettare la conversazione
+      const btnResetChat = document.getElementById('btnResetChat');
+      if (btnResetChat) {
+        btnResetChat.addEventListener('click', function() {
+          if (!sessionId) {
+            console.error("sessionId non definito per reset");
+            // Inizializza una nuova sessione se non esiste
+            initChat();
+            return;
+          }
+          
+          // Chiama l'API per resettare la conversazione sul server
+          fetch('/reset-conversation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              session_id: sessionId
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              // Reinizializza la chat
+              initChat();
+            } else {
+              console.error('Errore nel reset della conversazione:', data.message);
+              alert('Si è verificato un errore nel reset della conversazione.');
+            }
+          })
+          .catch(error => {
+            console.error('Errore nella chiamata API:', error);
+            alert('Si è verificato un errore di comunicazione con il server.');
+          });
+        });
+        console.log("Event listener per pulsante reset inizializzato");
+      } else {
+        console.error("Elemento btnResetChat non trovato");
+      }
+    
+      // Recupera il transcript dalla conversazione ElevenLabs
+      const btnRetrieve = document.getElementById('btnRetrieve');
+      if (btnRetrieve) {
+        btnRetrieve.addEventListener('click', function() {
+          const transcriptDiv = document.getElementById('transcript-display');
+          if (!transcriptDiv) {
+            console.error("Elemento transcript-display non trovato");
+            return;
+          }
+          
+          transcriptDiv.innerHTML = 
+            '<div class="flex items-center justify-center h-full">' +
+            '<svg class="animate-spin h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">' +
+            '<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>' +
+            '<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>' +
+            '</svg>' +
+            '</div>';
+          
+          fetch('/api/transcript')
+          .then(response => response.json())
+          .then(data => {
+            if (data.transcript_html && data.transcript_html.trim()) {
+              transcriptDiv.innerHTML = 
+                '<div class="px-2">' + 
+                data.transcript_html + 
+                '</div>';
+            } else {
+              transcriptDiv.innerHTML = 
+                '<div class="flex items-center justify-center h-full text-gray-500">' +
+                '<p>Nessuna conversazione disponibile</p>' +
+                '</div>';
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            transcriptDiv.innerHTML = 
+              '<div class="bg-red-50 p-4 rounded-lg border border-red-100 flex items-center">' +
+              '<svg class="w-6 h-6 text-red-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+              '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />' +
+              '</svg>' +
+              '<div>Errore nel recupero della conversazione.</div>' +
+              '</div>';
+          });
+        });
+        console.log("Event listener per pulsante transcript inizializzato");
+      } else {
+        console.error("Elemento btnRetrieve non trovato");
+      }
+    
+      // Estrazione dei contatti dalla conversazione
+      const btnExtract = document.getElementById('btnExtract');
+      if (btnExtract) {
+        btnExtract.addEventListener('click', function() {
+          const contactDiv = document.getElementById('contact-display');
+          if (!contactDiv) {
+            console.error("Elemento contact-display non trovato");
+            return;
+          }
+          
+          contactDiv.innerHTML = 
+            '<div class="flex items-center justify-center h-full">' +
+            '<svg class="animate-spin h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">' +
+            '<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>' +
+            '<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>' +
+            '</svg>' +
+            '</div>';
+          
+          fetch('/api/extract_contacts')
+          .then(response => response.json())
+          .then(data => {
+            if (data.contact_info && data.contact_info.trim()) {
+              contactDiv.innerHTML = 
+                '<div class="bg-green-50 p-4 rounded-lg border border-green-100">' +
+                data.contact_info +
+                '</div>';
+            } else {
+              contactDiv.innerHTML = 
+                '<div class="flex items-center justify-center h-full text-gray-500">' +
+                '<p>Nessuna informazione di contatto rilevata</p>' +
+                '</div>';
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            contactDiv.innerHTML = 
+              '<div class="bg-red-50 p-4 rounded-lg border border-red-100 flex items-center">' +
+              '<svg class="w-6 h-6 text-red-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+              '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />' +
+              '</svg>' +
+              '<div>Errore durante l\'estrazione dei contatti.</div>' +
+              '</div>';
+          });
+        });
+        console.log("Event listener per pulsante estrazione contatti inizializzato");
+      } else {
+        console.error("Elemento btnExtract non trovato");
+      }
+      
+      // Inizializza la chat dopo aver configurato tutti gli event listener
+      initChat();
+      console.log("Chat inizializzata");
+    });
+    
+    // Al termine del caricamento, forziamo il widget a rimanere nel container
+    window.addEventListener('load', () => {
+      console.log("Window caricata, gestione widget ElevenLabs");
+      
+      const observer = new MutationObserver((mutations, obs) => {
+        const widget = document.querySelector('elevenlabs-convai');
+        const container = document.getElementById('widget-container');
+        if (widget && container && widget.parentNode !== container) {
+          console.log("Sposto il widget ElevenLabs nel container corretto");
+          container.appendChild(widget);
+        }
+      });
+      
+      // Osserva il DOM per catturare quando il widget viene caricato/inserito
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+      
+      // Controllo iniziale
+      const widget = document.querySelector('elevenlabs-convai');
+      const container = document.getElementById('widget-container');
+      if (widget && container && widget.parentNode !== container) {
+        console.log("Inizializzazione widget ElevenLabs");
+        container.appendChild(widget);
+      }
+    });
+  </script>
+</body>
+</html>

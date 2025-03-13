@@ -1,0 +1,29 @@
+# Framework e server
+fastapi
+uvicorn
+python-multipart
+jinja2
+
+# LangChain e LLM
+langchain
+langchain-openai
+openai
+
+# Vector database
+chromadb
+faiss-cpu
+
+# Processamento documenti
+unstructured
+pypdf
+tiktoken
+
+# Utilities
+python-dotenv
+pydantic
+
+markdown
+python-docx
+pytesseract
+pdf2image
+pillow
