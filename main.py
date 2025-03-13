@@ -71,6 +71,14 @@ class TranscriptResponse(BaseModel):
 class ContactInfoResponse(BaseModel):
     contact_info: str
 
+# Modello Pydantic per la richiesta e risposta del webhook ElevenLabs
+class ElevenLabsWebhookRequest(BaseModel):
+    text: str
+    conversation_id: str
+
+class ElevenLabsWebhookResponse(BaseModel):
+    response: str
+
 # Memoria delle conversazioni per ogni sessione
 conversation_history: Dict[str, List[Dict[str, str]]] = {}
 
@@ -352,6 +360,46 @@ async def extract_contact_info():
         return ContactInfoResponse(
             contact_info="<p>Si è verificato un errore durante l'estrazione delle informazioni.</p>"
         )
+
+@app.post("/elevenlabs-webhook", response_model=ElevenLabsWebhookResponse)
+async def elevenlabs_webhook(request: ElevenLabsWebhookRequest):
+    """Endpoint per webhook ElevenLabs che restituisce i top 5 chunk dalla RAG."""
+    try:
+        # Mappa conversation_id a session_id per coerenza interna
+        session_id = request.conversation_id
+        
+        # Ottiene il vectorstore
+        vector_store = get_vectorstore()
+        
+        # Crea retriever con k=5 per ottenere i top 5 chunk
+        retriever = vector_store.as_retriever(
+            search_type="similarity",
+            search_kwargs={"k": 5}  # Prende i top 5 chunk
+        )
+        
+        # Recupera i documenti
+        docs = retriever.get_relevant_documents(request.text)
+        
+        # Combina tutti i chunk in un'unica risposta
+        combined_response = "\n\n".join([doc.page_content for doc in docs])
+        
+        # Salva la query nella storia della conversazione se necessario
+        if session_id in conversation_history:
+            conversation_history[session_id].append({
+                "role": "user",
+                "content": request.text
+            })
+        else:
+            conversation_history[session_id] = [{
+                "role": "user",
+                "content": request.text
+            }]
+        
+        return ElevenLabsWebhookResponse(response=combined_response)
+    
+    except Exception as e:
+        logger.error(f"Errore nel processare la richiesta webhook: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Errore del server: {str(e)}")
 
 # Avvio dell'applicazione
 if __name__ == "__main__":
