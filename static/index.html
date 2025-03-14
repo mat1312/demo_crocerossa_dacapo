@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- AOS Animation Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <!-- Marked.js per il parsing del Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -276,6 +278,84 @@
       color: #333;
       border-bottom-left-radius: 0.25rem;
       border-left: 3px solid #e3000f;
+    }
+
+    /* Stili per il contenuto Markdown nei messaggi del bot */
+    .bot-message a {
+      color: #e3000f;
+      text-decoration: underline;
+    }
+
+    .bot-message h1, .bot-message h2, .bot-message h3, 
+    .bot-message h4, .bot-message h5, .bot-message h6 {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .bot-message h1 { font-size: 1.5rem; }
+    .bot-message h2 { font-size: 1.3rem; }
+    .bot-message h3 { font-size: 1.2rem; }
+    .bot-message h4 { font-size: 1.1rem; }
+    .bot-message h5, .bot-message h6 { font-size: 1rem; }
+
+    .bot-message ul, .bot-message ol {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .bot-message ul { list-style-type: disc; }
+    .bot-message ol { list-style-type: decimal; }
+
+    .bot-message li {
+      margin-bottom: 0.25rem;
+    }
+
+    .bot-message code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-size: 0.9rem;
+    }
+
+    .bot-message pre {
+      background-color: #f5f5f5;
+      padding: 0.5rem;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+    }
+
+    .bot-message pre code {
+      background-color: transparent;
+      padding: 0;
+    }
+
+    .bot-message table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+
+    .bot-message th, .bot-message td {
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+    }
+
+    .bot-message th {
+      background-color: #f5f5f5;
+      font-weight: 600;
+    }
+
+    .bot-message blockquote {
+      border-left: 3px solid #e3000f;
+      padding-left: 0.75rem;
+      margin-left: 0;
+      margin-right: 0;
+      color: #666;
     }
 
     .message-time {
@@ -690,7 +770,7 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
     
-    // Funzione per aggiungere un messaggio del bot
+    // Funzione per aggiungere un messaggio del bot con supporto Markdown
     function addBotMessage(text, sources = []) {
       // Verifica che chatContainer esista
       if (!chatContainer) {
@@ -710,10 +790,13 @@
         sourcesHTML += '</ul></div>';
       }
       
+      // Converte il testo da Markdown a HTML usando marked.js
+      const parsedMarkdown = marked.parse(text);
+      
       const messageDiv = document.createElement('div');
       messageDiv.className = 'chat-message bot-message';
       messageDiv.innerHTML = `
-        ${text}
+        <div class="markdown-content">${parsedMarkdown}</div>
         ${sourcesHTML}
         <div class="message-time">${time}</div>
       `;
