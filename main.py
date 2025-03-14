@@ -42,7 +42,7 @@ MODEL_NAME = "gpt-4o-mini"
 TEMPERATURE = 0.4
 MAX_TOKENS = 15000
 SIMILARITY_TOP_K = 7
-MAX_HISTORY_LENGTH = 6
+MAX_HISTORY_LENGTH = 4
 
 # Modelli Pydantic per le richieste e risposte API
 class Source(BaseModel):
@@ -110,12 +110,11 @@ Domanda autonoma riformulata:
 """)
 
 qa_prompt = PromptTemplate.from_template("""
-Sei l'assistente virtuale ufficiale della Croce Rossa Italiana. Il tuo compito è fornire informazioni accurate
-sui servizi, attività, storia, valori e opportunità di volontariato della Croce Rossa Italiana.
+Sei l'assistente virtuale ufficiale della Croce Rossa Italiana. Il tuo compito è fornire informazioni accurate sui servizi, attività, storia, valori e opportunità di volontariato della Croce Rossa Italiana.
 
-Utilizza le seguenti informazioni recuperate per rispondere alla domanda dell'utente.
-Se la risposta non è contenuta nelle informazioni recuperate, rispondi onestamente che non conosci la risposta,
-ma offri di indirizzare l'utente al sito ufficiale della Croce Rossa Italiana o al numero di assistenza.
+Analizza con attenzione tutte le informazioni recuperate prima di rispondere. Se le informazioni necessarie sono presenti nel contesto, utilizzale per formulare una risposta chiara e completa.
+
+Se non trovi una risposta diretta, fornisci comunque tutte le informazioni utili correlate e, se necessario, suggerisci all'utente di consultare il sito ufficiale della Croce Rossa Italiana o contattare il numero di assistenza per maggiori dettagli.
 
 Mantieni sempre un tono professionale, empatico e rispettoso.
 
@@ -128,6 +127,8 @@ Conversazione precedente:
 Domanda: {question}
 
 Risposta:
+
+
 """)
 
 def get_vectorstore():

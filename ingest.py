@@ -39,8 +39,8 @@ os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(VECTOR_STORE_PATH, exist_ok=True)
 
 # Configurazione chunking
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+CHUNK_SIZE = 600
+CHUNK_OVERLAP = 100
 
 
 def load_documents(input_dir: str) -> List[Document]:
