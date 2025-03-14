@@ -371,7 +371,7 @@ async def elevenlabs_webhook(request: ElevenLabsWebhookRequest):
         # Crea retriever con k=5 per ottenere i top 5 chunk
         retriever = vector_store.as_retriever(
             search_type="similarity",
-            search_kwargs={"k": 5}  # Prende i top 5 chunk
+            search_kwargs={"k": 7}  # Prende i top 5 chunk
         )
         
         # Recupera i documenti
