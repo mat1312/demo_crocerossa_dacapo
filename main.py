@@ -139,7 +139,7 @@ def get_vectorstore():
     if not VECTOR_STORE_PATH.exists():
         raise FileNotFoundError(f"Vector store non trovato in {VECTOR_STORE_PATH}. Eseguire prima ingest.py.")
     
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     vector_store = Chroma(
         persist_directory=str(VECTOR_STORE_PATH),
         embedding_function=embeddings

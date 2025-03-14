@@ -98,8 +98,8 @@ def create_vector_store(chunks: List[Document]):
     if not OPENAI_API_KEY:
         raise ValueError("OPENAI_API_KEY non trovata. Imposta la variabile d'ambiente.")
     
-    # Usa OpenAI per gli embeddings
-    embeddings = OpenAIEmbeddings()
+    # Usa OpenAI per gli embeddings (modello large)
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     
     # Crea il vector store
     vector_store = Chroma.from_documents(
