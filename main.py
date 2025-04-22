@@ -362,15 +362,15 @@ async def extract_contact_info():
 
 @app.post("/elevenlabs-webhook", response_model=ElevenLabsWebhookResponse)
 async def elevenlabs_webhook(request: ElevenLabsWebhookRequest):
-    """Endpoint per webhook ElevenLabs che restituisce i top 5 chunk dalla RAG."""
+    """Endpoint per webhook ElevenLabs che restituisce i top chunk dalla RAG."""
     try:
         # Ottiene il vectorstore
         vector_store = get_vectorstore()
         
-        # Crea retriever con k=5 per ottenere i top 5 chunk
+        # Crea retriever con k=5 per ottenere i top  chunk
         retriever = vector_store.as_retriever(
             search_type="similarity",
-            search_kwargs={"k": 7}  # Prende i top 5 chunk
+            search_kwargs={"k": 12}  # Prende i top  chunk
         )
         
         # Recupera i documenti
