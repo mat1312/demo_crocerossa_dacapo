@@ -176,7 +176,6 @@ def get_conversation_chain(session_id: str):
     # Configura il modello LLM
     llm = ChatOpenAI(
         model_name=MODEL_NAME,
-        temperature=TEMPERATURE,
         max_tokens=MAX_TOKENS
     )
     
