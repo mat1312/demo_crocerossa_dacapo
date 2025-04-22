@@ -38,10 +38,10 @@ DATA_DIR = BASE_DIR / "data"
 VECTOR_STORE_PATH = DATA_DIR / "vector_store"
 
 # Configurazione LLM
-MODEL_NAME = "gpt-4o-mini"
+MODEL_NAME = "gpt-4.1-mini"
 TEMPERATURE = 0.4
 MAX_TOKENS = 15000
-SIMILARITY_TOP_K = 7
+SIMILARITY_TOP_K = 12
 MAX_HISTORY_LENGTH = 4
 
 # Modelli Pydantic per le richieste e risposte API
